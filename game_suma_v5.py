@@ -3,7 +3,6 @@ Pendientes:
 4. Agregar 4 operaciones básicas
 5. Agregar multiples pantallas
 6. Agregar un menu de inicio
-7. Agregar que el correcto e incorrecto lo diga en el screen
 Como evitar multiples clicks
 '''
 
@@ -52,6 +51,57 @@ def endtime():
 # def endcorrecto():
 #     correcto_end_time = pygame.time.get_ticks() + 1000
 #     return correcto_end_time
+
+
+#operaciones aleatorias pygame
+def operaciones_aleatorias():
+    # Suma Aleatoria
+    lstoper = ["+","-","*","/"]    
+    a = random.randint(1,3) #Aqui controlamos el nivel de dificultad
+    b = random.randint(1,3) #Aqui controlamos el nivel de dificultad
+    
+    tipo_operacion = random.choice(lstoper)
+
+    if tipo_operacion == "+":
+        resultado_operacion = a + b 
+        text_operacion = (f"{a} + {b}")
+    elif tipo_operacion == "-":
+        resultado_operacion = a - b 
+        text_operacion = (f"{a} - {b}")
+    elif tipo_operacion == "*":
+        resultado_operacion = a * b 
+        text_operacion = (f"{a} * {b}")
+    elif tipo_operacion == "/":
+        resultado_operacion = a // b 
+        text_operacion = (f"{a} / {b}")
+
+    aleatorio = random.randint(1, 3) #Para saber en cual boton se coloca la respuesta correcta
+
+    # c = a + b
+    
+    global bton_suma_correcta 
+
+    #Asignando valores a los botones
+    global bton1_text 
+    global bton2_text 
+    global bton3_text 
+    print(aleatorio)
+    if aleatorio == 1:
+        bton1_text = str(resultado_operacion)
+        bton2_text = str(random.randint(0,100)+resultado_operacion)
+        bton3_text = str(random.randint(0,100)+resultado_operacion+1)
+        bton_suma_correcta = 1
+    elif aleatorio == 2:
+        bton2_text = str(resultado_operacion)
+        bton1_text = str(random.randint(0,100)+resultado_operacion)
+        bton3_text = str(random.randint(0,100)+resultado_operacion+1)
+        bton_suma_correcta = 2
+    elif aleatorio == 3:
+        bton3_text = str(resultado_operacion)
+        bton1_text = str(random.randint(0,100)+resultado_operacion)
+        bton2_text = str(random.randint(0,100)+resultado_operacion+1)
+        bton_suma_correcta = 3
+    return text_operacion
 
 # Suma Aleatoria
 def suma_aleatoria():
@@ -118,7 +168,7 @@ def main():
     correcto = 0 #total de aciertos
     
     # La primera vez numero a desplegar
-    numtext = suma_aleatoria()
+    numtext = operaciones_aleatorias()
     text_render = font.render(numtext, True, BLACK)
     message_end_time = endtime() # tiempo de despliegue
     # correcto_end_time = endcorrecto() # tiempo de despliegue
@@ -198,7 +248,7 @@ def main():
 
         else:
             message_end_time = endtime()
-            numtext = suma_aleatoria()
+            numtext = operaciones_aleatorias()
             text_render = font.render(numtext, True, BLACK)
             screen.blit(text_render, text_render.get_rect(center = screen.get_rect().center))
             # displaysuma(numText)    
