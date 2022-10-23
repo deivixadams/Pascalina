@@ -1,13 +1,9 @@
 '''
-Pendientes:
-4. Agregar 4 operaciones básicas
-5. Agregar multiples pantallas
-6. Agregar un menu de inicio
-Como evitar multiples clicks
+Pantalla diseño
+Sonido
+Objetos
 '''
 
-#Agregando la parte de dectar si el usuario hizo la suma correcta...
-#Sonido usando print(\a)
 import pygame, random, time
 pygame.init()
 
@@ -38,6 +34,13 @@ width, height = size
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Flash Suma...")
 
+#Definiendo el background
+background = pygame.image.load("D://DEV//#CODE//GAMES//SUMA//IMG//background2.jpg")
+background = pygame.transform.scale(background, (size))
+# clock = pygame.time.Clock()
+
+
+
 #Definiendo texto y clock
 clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, 100)
@@ -46,12 +49,6 @@ font = pygame.font.SysFont(None, 100)
 def endtime():
     message_end_time = pygame.time.get_ticks() + 3000
     return message_end_time
-
-# #Aqui controlamos el nivel de rapidez con que se despliega correcto
-# def endcorrecto():
-#     correcto_end_time = pygame.time.get_ticks() + 1000
-#     return correcto_end_time
-
 
 #operaciones aleatorias pygame
 def operaciones_aleatorias():
@@ -159,27 +156,63 @@ def button(screen, position, text):
     pygame.draw.rect(screen, (100, 100, 100), (x, y, w , h))
     return screen.blit(text_render, (x, y))
  
-def main():
-   
+# **********  MAIN PROGRAM ************************************************
+
+#Class to display text on screen
+class TextScreen:
+    def __init__(self, screen,text, size, color, x, y):
+        self.screen = screen
+        self.textlst = text
+        self.size = size
+        self.color = color
+        self.x = x
+        self.y = y
+        self.font = pygame.font.SysFont("Arial", self.size)
+
+    def display(self):
+
+        for i in self.textlst:
+            self.y += 30 #Controlo espacio entre lineas
+            text = self.font.render(i, True, WHITE)
+            text_rect = text.get_rect(right=self.x, top=self.y)
+            #text_rect.right = (480)
+            screen.blit(text, (text_rect))
+
+
+
+# #configurando mi pantalla
+def escribir(screen, position, text):
+    font = pygame.font.SysFont("Arial", 25)
+    escribir = font.render(text, True, WHITE)
+    screen.blit(escribir, position)
     
+
+def main():
+      
     aciertos = 0 #Aciertos control
     txtcorrecto = " "  #control del mensaje correcto/incorrecto
     t = True #bucle maestro
     correcto = 0 #total de aciertos
+    incorrecto = 0 #total de errores
+    Score = 0 #Puntaje
+    Tiempo = 0 #Tiempo
+    textinfo = ("Correcto:","Incorrecto:", "Puntaje:", "Score:", "Tiempo:")
+    
+    # dei
+    # textinfo = ("Correcto:","Incorrecto:")
     
     # La primera vez numero a desplegar
     numtext = operaciones_aleatorias()
     text_render = font.render(numtext, True, BLACK)
     message_end_time = endtime() # tiempo de despliegue
     # correcto_end_time = endcorrecto() # tiempo de despliegue
-   
+    
     
     while t:
-        #En cada loop background color is set to yellow
-        screen.fill(YELLOW)
-        #Control fps no matter how fast the computer is
-        #clock.tick(60)
         
+        #Poniendo background
+        screen.blit(background, (0, 0))
+
         #reading initial time
         current_time = pygame.time.get_ticks()
         # current_time_correcto = pygame.time.get_ticks()
@@ -188,35 +221,32 @@ def main():
         b2 = button(screen, (400, 300), bton1_text)
         b3 = button(screen, (500, 300), bton2_text)
         b4 = button(screen, (600, 300), bton3_text)
-
+        
         for event in pygame.event.get():
-            if (event.type == pygame.quit):
+            if (event.type == pygame.QUIT):
                 t = False
                 #pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     t = False
-                # key_to_start = event.key == pygame.K_s or event.key == pygame.K_RIGHT or event.key == pygame.K_UP
-                # if key_to_start:
-                #     start()
                 #-----------------Botones-----------------
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if b1.collidepoint(pygame.mouse.get_pos()):
                     t = False
                 elif b2.collidepoint(pygame.mouse.get_pos()) and bton_suma_correcta == 1:
                     aciertos += 1
-                    correcto = 1
+                    correcto = 1 #Boton con el dato correcto
                     print("Correcto \a")
                 elif b3.collidepoint(pygame.mouse.get_pos()) and bton_suma_correcta == 2:
                     aciertos += 1
-                    correcto = 1
+                    correcto = 1 #Boton con el dato correcto
                     print("Correcto \a")
                 elif b4.collidepoint(pygame.mouse.get_pos()) and bton_suma_correcta == 3:
                     aciertos += 1
-                    correcto = 1
+                    correcto = 1 #Boton con el dato correcto
                     print("Correcto \a")
                 else:
-                    correcto = 2
+                    correcto = 2 
             else:
                 correcto = 3
                     
@@ -229,18 +259,8 @@ def main():
 
         #Generando números aleatorios
         '''Se debe seleccionar de forma aleatoria la operación básica a realizar'''
-       
-        # #control del texto desplegado correcto o incorrecto
-        # if current_time_correcto < correcto_end_time:           
-        #     if  correcto:
-        #         txtcorrecto = font.render("Correcto...", True, BLACK) #seteamos el texto de la suma
-        #         screen.blit(txtcorrecto, (100,100)) #desplegamos el texto de la suma centro pantalla
-        #     else:
-        #         #correcto_end_time = endcorrecto()
-        #         txtcorrecto = font.render("", True, BLACK) #seteamos el texto de la suma
-        #         screen.blit(txtcorrecto, (100,100)) #desplegamos el texto de la suma centro pantalla
                 
-          #control del texto desplegado
+        #control del texto desplegado
         if current_time < message_end_time:
             screen.blit(text_render, text_render.get_rect(center = screen.get_rect().center))
             screen.blit(txtcorrecto, (100,100))  
@@ -251,17 +271,17 @@ def main():
             numtext = operaciones_aleatorias()
             text_render = font.render(numtext, True, BLACK)
             screen.blit(text_render, text_render.get_rect(center = screen.get_rect().center))
-            # displaysuma(numText)    
-            #Borrando texto correcto
-            # txtcorrecto = font.render("", True, BLACK)   
-            # screen.blit(txtcorrecto, (100,100))  
-
+        escribir = TextScreen(screen, textinfo,25,WHITE,480,30)
+        escribir.display()
+        
         pygame.display.flip()
     text_acierto = font.render("Aciertos: " + str(aciertos), True, RED) #seteamos el texto de la suma
     screen.blit(text_acierto, (100,100)) #desplegamos el texto de la suma centro pantalla
     pygame.display.flip()
     print("Aciertos: ", aciertos)       
     pygame.time.wait(300)
+
+
 if __name__ == "__main__":
     main()
     exit()  
