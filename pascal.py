@@ -69,21 +69,22 @@ class EspecialBoton(Button):
     pass
 
 class Operaciones:
-    def __init__(self, screen,btnsize, btnposy):
-        self.screen = screen
-        self.btnsize = btnsize
-        self.btnposy = btnposy
-        self.bton1_text = "11111"
-        self.bton2_text = "22222"
-        self.bton3_text = "33333"
-        self.bton4_text = "Reset"
-        self.bton5_text = "Nivel"
-        #Desplegando los botones
-        buttons1 = Button(self.screen, self.btnsize,self.bton1_text,  Color().green, Color().black,(180,self.btnposy)).drawbutton()
-        buttons2 = Button(self.screen, self.btnsize,self.bton2_text , Color().green, Color().black,(280,self.btnposy)).drawbutton()
-        buttons3 = Button(self.screen, self.btnsize,self.bton3_text , Color().green, Color().black,(380,self.btnposy)).drawbutton()
-        buttons4 = Button(self.screen, self.btnsize,self.bton4_text , Color().green, Color().white,(480,self.btnposy)).drawbutton()
-        buttons5 = Button(self.screen, self.btnsize,self.bton5_text , Color().green, Color().red,  (580,self.btnposy)).drawbutton()
+    def __init__(self):
+        pass
+        # self.screen = screen
+        # self.btnsize = btnsize
+        # self.btnposy = btnposy
+        # self.bton1_text = "11111"
+        # self.bton2_text = "22222"
+        # self.bton3_text = "33333"
+        # self.bton4_text = "Reset"
+        # self.bton5_text = "Nivel"
+        # #Desplegando los botones
+        # buttons1 = Button(self.screen, self.btnsize,self.bton1_text,  Color().green, Color().black,(180,self.btnposy)).drawbutton()
+        # buttons2 = Button(self.screen, self.btnsize,self.bton2_text , Color().green, Color().black,(280,self.btnposy)).drawbutton()
+        # buttons3 = Button(self.screen, self.btnsize,self.bton3_text , Color().green, Color().black,(380,self.btnposy)).drawbutton()
+        # buttons4 = Button(self.screen, self.btnsize,self.bton4_text , Color().green, Color().white,(480,self.btnposy)).drawbutton()
+        # buttons5 = Button(self.screen, self.btnsize,self.bton5_text , Color().green, Color().red,  (580,self.btnposy)).drawbutton()
     
     
 
@@ -164,11 +165,11 @@ class Game():
         # self.screen = screen
         self.repeat = True
         # Texto de los botones
-        # self.bton1_text = "11111"
-        # self.bton2_text = "22222"
-        # self.bton3_text = "33333"
-        # self.bton4_text = "Reset"
-        # self.bton5_text = "Nivel"
+        self.bton1_text = "11111"
+        self.bton2_text = "22222"
+        self.bton3_text = "33333"
+        self.bton4_text = "Reset"
+        self.bton5_text = "Nivel"
         self.aciertos = 0 #Aciertos control
         self.txtcorrecto = " "  #control del mensaje correcto/incorrecto
         self.correcto = 0 #total de aciertos
@@ -202,7 +203,7 @@ class Game():
 
         while self.repeat:
             current_time = pygame.time.get_ticks()
-            self.numtext = Operaciones(self.myscreen.screen,self.sizebtn,self.posbty).operaciones_aleatorias() #Genera operaciones aleatorias y botones
+            self.numtext = Operaciones().operaciones_aleatorias() #Genera operaciones aleatorias y botones
 
             # ------------No entiendo esta parte----------------
             '''Si quito esta línea de código el texto de indicadores se fuñe, pero no entiendo porque'''
@@ -214,11 +215,11 @@ class Game():
                     self.repeat = 0 
 
             # #Desplegando los botones
-            # buttons1 = Button(self.myscreen.screen, self.sizebtn,self.bton1_text,  Color().green, Color().black,(180, self.posbty)).drawbutton()
-            # buttons2 = Button(self.myscreen.screen, self.sizebtn,self.bton2_text , Color().green, Color().black,(280,self.posbty)).drawbutton()
-            # buttons3 = Button(self.myscreen.screen, self.sizebtn,self.bton3_text , Color().green, Color().black,(380,self.posbty)).drawbutton()
-            # buttons4 = Button(self.myscreen.screen, self.sizebtn,self.bton4_text , Color().green, Color().white,(480,self.posbty)).drawbutton()
-            # buttons5 = Button(self.myscreen.screen, self.sizebtn,self.bton5_text , Color().green, Color().red,(580,self.posbty)).drawbutton()
+            buttons1 = Button(self.myscreen.screen, self.sizebtn,self.bton1_text,  Color().green, Color().black,(180, self.posbty)).drawbutton()
+            buttons2 = Button(self.myscreen.screen, self.sizebtn,self.bton2_text , Color().green, Color().black,(280,self.posbty)).drawbutton()
+            buttons3 = Button(self.myscreen.screen, self.sizebtn,self.bton3_text , Color().green, Color().black,(380,self.posbty)).drawbutton()
+            buttons4 = Button(self.myscreen.screen, self.sizebtn,self.bton4_text , Color().green, Color().white,(480,self.posbty)).drawbutton()
+            buttons5 = Button(self.myscreen.screen, self.sizebtn,self.bton5_text , Color().green, Color().red,(580,self.posbty)).drawbutton()
 
             #control del texto desplegado
             if current_time < self.message_end_time:
@@ -228,7 +229,7 @@ class Game():
             else:
                 '''Ver el caso de self.numtext  vs numtext'''
                 self.message_end_time = Game().endtime()
-                self.numtext = Operaciones(self.myscreen.screen,self.sizebtn,self.posbty).operaciones_aleatorias()
+                self.numtext = Operaciones().operaciones_aleatorias()
                 text_render = self.font.render(self.numtext, True, Color().black)
                 self.myscreen.screen.blit(text_render, text_render.get_rect(center = self.myscreen.screen.get_rect().center))
                 #Colocando los indicadores
