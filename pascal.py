@@ -4,6 +4,29 @@
 import pygame, random, time
 import sys
 
+
+class Indicadores:
+    def __init__(self):
+        self.Dicc_textinfo = {
+            "Correcto": 9999,
+            "Incorrecto": 9999, 
+            "Score": 9999, 
+            "Nivel": 1
+        }
+
+    def get_nivel(self):
+        return self.Dicc_textinfo.get("Nivel")
+
+    def get_dicc(self):
+        return self.Dicc_textinfo
+
+    def set_dict_values(self, i):
+        if i > 6:
+            self.Dicc_textinfo["Nivel"] = 1
+        else:
+            self.Dicc_textinfo["Nivel"] = i
+
+
 class say():
     def __init__(self, t1, t2):
         self.text = t1
@@ -85,9 +108,12 @@ class Button:
 
 #Class to display text on screen
 class TextScreen:
+    '''
+    El problema es que no llega el diccionario actualizado...
+    '''
     def __init__(self, screen,text, size, color, x, y):
         self.screen = screen
-        self.textlst = text
+        self.textDict = text
         self.size = size
         self.color = color
         self.x = x
@@ -95,17 +121,19 @@ class TextScreen:
         self.font = pygame.font.SysFont("Arial", self.size)
 
     def display(self):
-        for i in self.textlst:
+        for i in self.textDict:
+            #Trick to display value value and key from a dictionary
+            text = i + str(self.textDict[i])
             self.y += 30 #Controlo espacio entre lineas
-            text = self.font.render(i, True, Color().white)
+            text = self.font.render(text, True, Color().white)
             text_rect = text.get_rect(right=self.x, top=self.y)
-            #text_rect.right = (480)
             self.screen.blit(text, (text_rect))
 
 
 #class game 
 class Game():
-    def __init__(self, nivel):
+    def __init__(self):
+        self.d = Indicadores() #Instanciando clase indicadores
         # self.screen = screen
         self.repeat = True
         # Texto de los botones
@@ -116,13 +144,8 @@ class Game():
         self.bton5_text = "Nivel"
         self.aciertos = 0 #Aciertos control
         self.txtcorrecto = " "  #control del mensaje correcto/incorrecto
-        self.correcto = 0 #total de aciertos
-        self.incorrecto = 0 #total de errores
-        self.Score = 0 #Puntaje
-        self.Tiempo = 0 #Tiempo
-        self.nivel = nivel #Nivel
-        self.reset = 0 #Reset
-        self.textinfo = ("Correcto:","Incorrecto:", "Puntaje:", "Score:", "Tiempo:")
+        # self.correcto = 0 #total de aciertos
+        # self.incorrecto = 0 #total de errores
         self.myscreen = ScreenMain((800,500), "Pascalina", "D://DEV//#CODE//GAMES//SUMA//IMG//background2.jpg")   
         self.clock = pygame.time.Clock()
         self.fps = 60
@@ -131,28 +154,22 @@ class Game():
         self.font = pygame.font.SysFont("Arial", 100)
         self.numtext = " "
         self.message_end_time = pygame.time.get_ticks()
-    
-    # def set_nivel(self):
-    #     self.nivel += 1
-    #     self.endtime()
-    #     if self.nivel > 3:
-    #         self.nivel = 1
+        
 
-    # def get_nivel(self):
-    #     return self.nivel
 
-    def endtime(self):
-        print("Nivel: ", self.nivel)
-        if self.nivel == 1:
+    def endtime(self, nivel):
+        if nivel== 1:
             self.message_end_time = pygame.time.get_ticks() + 3000
-        elif self.nivel == 2:
+        elif nivel== 2:
             self.message_end_time = pygame.time.get_ticks() + 2000
-        elif self.nivel == 3:
+        elif nivel== 3:
             self.message_end_time = pygame.time.get_ticks() + 1000
-        elif self.nivel == 4:
-            self.message_end_time = pygame.time.get_ticks() + 500
-        elif self.nivel == 5:
-            self.message_end_time = pygame.time.get_ticks() + 250
+        elif nivel== 4:
+            self.message_end_time = pygame.time.get_ticks() + 600
+        elif nivel== 5:
+            self.message_end_time = pygame.time.get_ticks() + 400
+        elif nivel== 6:
+            self.message_end_time = pygame.time.get_ticks() + 300
         return self.message_end_time
 
     #-------------------------Operaciones-------------------------
@@ -183,18 +200,23 @@ class Game():
         return text_operacion, resultado_operacion
     # ------------------------------------------------------------
 
-
+    
+    
+    
     def game_loop(self):
+
         text_render = self.font.render(self.numtext, True, Color().black)
 
         while self.repeat:
+
             current_time = pygame.time.get_ticks()
-            operacion = Game(self.nivel).operaciones_aleatorias()
+            operacion = Game().operaciones_aleatorias()
             self.numtext = operacion[0] #Genera operaciones aleatorias y botones
 
             # ------------No entiendo esta parte----------------
             '''Si quito esta línea de código el texto de indicadores se fuñe, pero no entiendo porque'''
-            Game(self.nivel).endtime()   
+            #print(self.d.get_nivel())
+            Game().endtime(self.d.get_nivel())   
             # ------------No entiendo esta parte----------------
             
             # ----------------------------#Desplegando los botones--------------------------
@@ -235,10 +257,14 @@ class Game():
                     elif b4.get_rect().collidepoint(pygame.mouse.get_pos()): #Reset
                         say("b4", "reset").imprimir()
                     elif b5.get_rect().collidepoint(pygame.mouse.get_pos()):   #Nivel 
-                        print(self.nivel)
-                        self.nivel += 1
-                        if self.nivel > 5:
-                            self.nivel = 1
+                        #velocidad_despliegue += 1
+                        '''
+                        #WAOOOO LA MAGIA DE LA PROG ORIENTADA A OBJETOS. ME AHORRO TENER UNA VARIABLE E IRLA ACTUALIZANDO
+                        '''
+                        # velocidad_juego += 1
+                        self.d.set_dict_values(self.d.get_nivel()+1) #Actualiza los valores del diccionario
+                        #print(self.d.get_nivel()) #Obtiene el nivel
+
                 else:
                     correcto = 3
 
@@ -254,8 +280,8 @@ class Game():
                 Controlamos el tiempo de despliegue del texto
                 '''
                 
-                self.message_end_time = Game(self.nivel).endtime()
-                self.numtext = Game(self.nivel).operaciones_aleatorias()[0] #This python trick is called tuple unpacking
+                self.message_end_time = Game().endtime(self.d.get_nivel())
+                self.numtext = Game().operaciones_aleatorias()[0] # truco: This python trick is called tuple unpacking
                 text_render = self.font.render(self.numtext, True, Color().black)
                 self.myscreen.screen.blit(text_render, text_render.get_rect(center = self.myscreen.screen.get_rect().center))
                 #Colocando los indicadores
@@ -280,8 +306,7 @@ class Game():
                     self.bton2_text= space+ str(random.randint(0,100)+resultado_operacion)+ space
                     self.bton_suma_correcta = 3
                       
-
-            escribir = TextScreen(self.myscreen.screen, self.textinfo,25,Color().white, 650, 30)
+            escribir = TextScreen(self.myscreen.screen, self.d.Dicc_textinfo, 25, Color().white, 650, 30) #Aquí se despliega el texto de los indicadores
             escribir.display()
 
             pygame.display.flip()
@@ -290,7 +315,7 @@ class Game():
 if __name__ == "__main__":
     #inicializando pygame
     pygame.init()
-    game = Game(1)
+    game = Game()
     game.game_loop()
     pygame.quit()
     sys.exit()
