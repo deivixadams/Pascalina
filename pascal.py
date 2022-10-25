@@ -51,7 +51,21 @@ class Button:
         self.text_color = text_color
         self.font = pygame.font.SysFont("Arial", 40)
         self.text_render = self.font.render(self.caption, 1, self.text_color) #rendering text
+        self.bton_suma_correcta = 0
+        #     #size boton fix
+        # lentext = len(text)
+        # if lentext == 1:
+        #     text = "  "+ text +"  "
+        # elif lentext == 2:
+        #     text = "  "+ text +" "
+        # elif lentext == 3:
+        #     text = " "+ text +" "
+        # elif lentext == 4:
+        #     text = " " + text
+
     
+
+
     #Defining button
     def drawbutton(self):
         x, y, w , h = self.text_render.get_rect()
@@ -63,88 +77,6 @@ class Button:
         pygame.draw.line(self.screen, Color().green, (x + w , y+h), [x + w , y], 5)
         pygame.draw.rect(self.screen, Color().orange, (x, y, w , h)) #Color de fondo botón
         self.screen.blit(self.text_render, (x, y))
-
-    def set_caption(self, caption):
-        self.caption = caption
-        self.text_render = self.font.render(self.caption, 1, self.text_color)
-
-
-# #Para redefinir algunos botones
-# class EspecialBoton(Button):
-#     pass
-
-# class Operaciones:
-#     def __init__(self):
-#         pass
-        # self.screen = screen
-        # self.btnsize = btnsize
-        # self.btnposy = btnposy
-        # self.bton1_text = "11111"
-        # self.bton2_text = "22222"
-        # self.bton3_text = "33333"
-        # self.bton4_text = "Reset"
-        # self.bton5_text = "Nivel"
-        # #Desplegando los botones
-        # buttons1 = Button(self.screen, self.btnsize,self.bton1_text,  Color().green, Color().black,(180,self.btnposy)).drawbutton()
-        # buttons2 = Button(self.screen, self.btnsize,self.bton2_text , Color().green, Color().black,(280,self.btnposy)).drawbutton()
-        # buttons3 = Button(self.screen, self.btnsize,self.bton3_text , Color().green, Color().black,(380,self.btnposy)).drawbutton()
-        # buttons4 = Button(self.screen, self.btnsize,self.bton4_text , Color().green, Color().white,(480,self.btnposy)).drawbutton()
-        # buttons5 = Button(self.screen, self.btnsize,self.bton5_text , Color().green, Color().red,  (580,self.btnposy)).drawbutton()
-    
-    
-
-    # #operaciones aleatorias pygame
-    # def operaciones_aleatorias(self):
-    #     # Suma Aleatoria
-    #     lstoper = ["+","-","*","/"]    
-    #     a = random.randint(1,3) #Aqui controlamos el nivel de dificultad
-    #     b = random.randint(1,3) #Aqui controlamos el nivel de dificultad
-        
-    #     tipo_operacion = random.choice(lstoper)
-
-    #     if tipo_operacion == "+":
-    #         resultado_operacion = a + b 
-    #         text_operacion = (f"{a} + {b}")
-    #     elif tipo_operacion == "-":
-    #         resultado_operacion = a - b 
-    #         text_operacion = (f"{a} - {b}")
-    #     elif tipo_operacion == "*":
-    #         resultado_operacion = a * b 
-    #         text_operacion = (f"{a} * {b}")
-    #     elif tipo_operacion == "/":
-    #         resultado_operacion = a // b 
-    #         text_operacion = (f"{a} / {b}")
-
-    #     aleatorio = random.randint(1, 3) #Para saber en cual boton se coloca la respuesta correcta
-
-    #     # c = a + b
-
-    #     global bton_suma_correcta 
-
-    #     #---Caption
-    #     bt = Button().set_caption()
-    #     #----go
-    #     #Asignando valores a los botones
-    #     global bton1_text 
-    #     global bton2_text 
-    #     global bton3_text 
-    #     #print(aleatorio)
-    #     if aleatorio == 1:
-    #         bton1_text = str(resultado_operacion)
-    #         bton2_text = str(random.randint(0,100)+resultado_operacion)
-    #         bton3_text = str(random.randint(0,100)+resultado_operacion+1)
-    #         bton_suma_correcta = 1
-    #     elif aleatorio == 2:
-    #         bton2_text = str(resultado_operacion)
-    #         bton1_text = str(random.randint(0,100)+resultado_operacion)
-    #         bton3_text = str(random.randint(0,100)+resultado_operacion+1)
-    #         bton_suma_correcta = 2
-    #     elif aleatorio == 3:
-    #         bton3_text = str(resultado_operacion)
-    #         bton1_text = str(random.randint(0,100)+resultado_operacion)
-    #         bton2_text = str(random.randint(0,100)+resultado_operacion+1)
-    #         bton_suma_correcta = 3
-    #     return text_operacion
 
 
 #Class to display text on screen
@@ -159,13 +91,13 @@ class TextScreen:
         self.font = pygame.font.SysFont("Arial", self.size)
 
     def display(self):
-
         for i in self.textlst:
             self.y += 30 #Controlo espacio entre lineas
             text = self.font.render(i, True, Color().white)
             text_rect = text.get_rect(right=self.x, top=self.y)
             #text_rect.right = (480)
             self.screen.blit(text, (text_rect))
+
 
 #class game 
 class Game():
@@ -229,36 +161,9 @@ class Game():
             resultado_operacion = a // b 
             text_operacion = (f"{a} / {b}")
 
-        aleatorio = random.randint(1, 3) #Para saber en cual boton se coloca la respuesta correcta
-
-        # c = a + b
-
-        global bton_suma_correcta 
-
-        #---Caption
-        #bt = Button().set_caption()
-        #----go
-        #Asignando valores a los botones
-        global bton1_text 
-        global bton2_text 
-        global bton3_text 
-        #print(aleatorio)
-        if aleatorio == 1:
-            bton1_text = str(resultado_operacion)
-            bton2_text = str(random.randint(0,100)+resultado_operacion)
-            bton3_text = str(random.randint(0,100)+resultado_operacion+1)
-            bton_suma_correcta = 1
-        elif aleatorio == 2:
-            bton2_text = str(resultado_operacion)
-            bton1_text = str(random.randint(0,100)+resultado_operacion)
-            bton3_text = str(random.randint(0,100)+resultado_operacion+1)
-            bton_suma_correcta = 2
-        elif aleatorio == 3:
-            bton3_text = str(resultado_operacion)
-            bton1_text = str(random.randint(0,100)+resultado_operacion)
-            bton2_text = str(random.randint(0,100)+resultado_operacion+1)
-            bton_suma_correcta = 3
-        return text_operacion
+        #Game().bton1_text = "fucking"
+        
+        return text_operacion, resultado_operacion
     # ------------------------------------------------------------
 
 
@@ -267,7 +172,8 @@ class Game():
 
         while self.repeat:
             current_time = pygame.time.get_ticks()
-            self.numtext = Game().operaciones_aleatorias() #Genera operaciones aleatorias y botones
+            operacion = Game().operaciones_aleatorias()
+            self.numtext = operacion[0] #Genera operaciones aleatorias y botones
 
             # ------------No entiendo esta parte----------------
             '''Si quito esta línea de código el texto de indicadores se fuñe, pero no entiendo porque'''
@@ -278,12 +184,19 @@ class Game():
                 if event.type == pygame.QUIT: 
                     self.repeat = 0 
 
-            # #Desplegando los botones
-            buttons1 = Button(self.myscreen.screen, self.sizebtn,self.bton1_text,  Color().green, Color().black,(180, self.posbty)).drawbutton()
-            buttons2 = Button(self.myscreen.screen, self.sizebtn,self.bton2_text , Color().green, Color().black,(280,self.posbty)).drawbutton()
-            buttons3 = Button(self.myscreen.screen, self.sizebtn,self.bton3_text , Color().green, Color().black,(380,self.posbty)).drawbutton()
-            buttons4 = Button(self.myscreen.screen, self.sizebtn,self.bton4_text , Color().green, Color().white,(480,self.posbty)).drawbutton()
-            buttons5 = Button(self.myscreen.screen, self.sizebtn,self.bton5_text , Color().green, Color().red,(580,self.posbty)).drawbutton()
+
+            # ----------------------------#Desplegando los botones y asignando captión--------------------------
+            buttons1 = Button(self.myscreen.screen, self.sizebtn,self.bton1_text,  Color().green, Color().black,(180, self.posbty))
+            buttons1.drawbutton()
+            buttons2 = Button(self.myscreen.screen, self.sizebtn,self.bton2_text, Color().green, Color().black,(280,self.posbty))
+            buttons2.drawbutton()
+            buttons3 = Button(self.myscreen.screen, self.sizebtn,self.bton3_text, Color().green, Color().black,(380,self.posbty))
+            buttons3.drawbutton()
+            buttons4 = Button(self.myscreen.screen, self.sizebtn,self.bton4_text, Color().green, Color().white,(480,self.posbty))
+            buttons4.drawbutton()
+            buttons5 = Button(self.myscreen.screen, self.sizebtn,self.bton5_text, Color().green, Color().red,(580,self.posbty))
+            buttons5.drawbutton()
+            # ----------------------------#Desplegando los botones--------------------------
 
             #control del texto desplegado
             if current_time < self.message_end_time:
@@ -291,13 +204,38 @@ class Game():
                 #self.myscreen.screen.blit(self.txtcorrecto, (100,100))  
                 # pygame.time.wait(200)
             else:
-                '''Ver el caso de self.numtext  vs numtext'''
+                '''
+                Mucho poder en esta parte
+                Controlamos el tiempo de despliegue del texto
+                '''
+                
                 self.message_end_time = Game().endtime()
-                self.numtext = Game().operaciones_aleatorias()
+                self.numtext = Game().operaciones_aleatorias()[0] #This python trick is called tuple unpacking
                 text_render = self.font.render(self.numtext, True, Color().black)
                 self.myscreen.screen.blit(text_render, text_render.get_rect(center = self.myscreen.screen.get_rect().center))
                 #Colocando los indicadores
-            
+                aleatorio = random.randint(1, 3) #Para saber en cual boton se coloca la respuesta correcta
+                resultado_operacion = operacion[1] #Resultado de la operación 
+                print(aleatorio)
+                space = "   "
+ 
+                if aleatorio == 1:
+                    self.bton1_text= space+ str(resultado_operacion) + "   "
+                    self.bton2_text= space+ str(random.randint(0,100)+resultado_operacion+1)+ "   "
+                    self.bton3_text= space+ str(random.randint(0,100)+resultado_operacion)+ "   "
+                    self.bton_suma_correcta = 1
+                elif aleatorio == 2:
+                    self.bton2_text= space+ str(resultado_operacion)+ "   "
+                    self.bton1_text= space+ str(random.randint(0,100)+resultado_operacion+1)+ "   "
+                    self.bton3_text= space+ str(random.randint(0,100)+resultado_operacion)+ "   "
+                    self.bton_suma_correcta = 2
+                elif aleatorio == 3:
+                    self.bton3_text= space+ str(resultado_operacion)+ "   "
+                    self.bton1_text= space+ str(random.randint(0,100)+resultado_operacion+1)+ "   "
+                    self.bton2_text= space+ str(random.randint(0,100)+resultado_operacion)+ "   "
+                    self.bton_suma_correcta = 3
+                      
+
             escribir = TextScreen(self.myscreen.screen, self.textinfo,25,Color().white, 650, 30)
             escribir.display()
 
