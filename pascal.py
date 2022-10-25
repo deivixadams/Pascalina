@@ -13,8 +13,6 @@ class say():
         print(f"La variable:{self.text} el valor--> {self.text2}")
 
 
- 
-        
 #Definimos colores
 class Color:
     def __init__(self):
@@ -107,7 +105,7 @@ class TextScreen:
 
 #class game 
 class Game():
-    def __init__(self, nivel=1):
+    def __init__(self, nivel):
         # self.screen = screen
         self.repeat = True
         # Texto de los botones
@@ -133,15 +131,28 @@ class Game():
         self.font = pygame.font.SysFont("Arial", 100)
         self.numtext = " "
         self.message_end_time = pygame.time.get_ticks()
-        
+    
+    # def set_nivel(self):
+    #     self.nivel += 1
+    #     self.endtime()
+    #     if self.nivel > 3:
+    #         self.nivel = 1
+
+    # def get_nivel(self):
+    #     return self.nivel
 
     def endtime(self):
+        print("Nivel: ", self.nivel)
         if self.nivel == 1:
             self.message_end_time = pygame.time.get_ticks() + 3000
         elif self.nivel == 2:
             self.message_end_time = pygame.time.get_ticks() + 2000
         elif self.nivel == 3:
             self.message_end_time = pygame.time.get_ticks() + 1000
+        elif self.nivel == 4:
+            self.message_end_time = pygame.time.get_ticks() + 500
+        elif self.nivel == 5:
+            self.message_end_time = pygame.time.get_ticks() + 250
         return self.message_end_time
 
     #-------------------------Operaciones-------------------------
@@ -178,12 +189,12 @@ class Game():
 
         while self.repeat:
             current_time = pygame.time.get_ticks()
-            operacion = Game().operaciones_aleatorias()
+            operacion = Game(self.nivel).operaciones_aleatorias()
             self.numtext = operacion[0] #Genera operaciones aleatorias y botones
 
             # ------------No entiendo esta parte----------------
             '''Si quito esta línea de código el texto de indicadores se fuñe, pero no entiendo porque'''
-            Game().endtime()   
+            Game(self.nivel).endtime()   
             # ------------No entiendo esta parte----------------
             
             # ----------------------------#Desplegando los botones--------------------------
@@ -224,10 +235,10 @@ class Game():
                     elif b4.get_rect().collidepoint(pygame.mouse.get_pos()): #Reset
                         say("b4", "reset").imprimir()
                     elif b5.get_rect().collidepoint(pygame.mouse.get_pos()):   #Nivel 
-                        say("b5", "nivel").imprimir()
-                        Game().nivel += 1
-                        if Game().nivel > 3:
-                            Game().nivel = 1
+                        print(self.nivel)
+                        self.nivel += 1
+                        if self.nivel > 5:
+                            self.nivel = 1
                 else:
                     correcto = 3
 
@@ -243,8 +254,8 @@ class Game():
                 Controlamos el tiempo de despliegue del texto
                 '''
                 
-                self.message_end_time = Game().endtime()
-                self.numtext = Game().operaciones_aleatorias()[0] #This python trick is called tuple unpacking
+                self.message_end_time = Game(self.nivel).endtime()
+                self.numtext = Game(self.nivel).operaciones_aleatorias()[0] #This python trick is called tuple unpacking
                 text_render = self.font.render(self.numtext, True, Color().black)
                 self.myscreen.screen.blit(text_render, text_render.get_rect(center = self.myscreen.screen.get_rect().center))
                 #Colocando los indicadores
@@ -279,7 +290,7 @@ class Game():
 if __name__ == "__main__":
     #inicializando pygame
     pygame.init()
-    game = Game()
+    game = Game(1)
     game.game_loop()
     pygame.quit()
     sys.exit()
