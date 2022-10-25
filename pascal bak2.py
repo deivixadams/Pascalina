@@ -1,20 +1,13 @@
+'''
+En este backup todo funciona bien, ahora comenzaré a modificar el código para que funcione el click
+'''
+
 #importanto modulos de pygame   
 
 #from game_suma_v9 import RED, YELLOW
 import pygame, random, time
 import sys
 
-class say():
-    def __init__(self, t1, t2):
-        self.text = t1
-        self.text2 = t2
-
-    def imprimir(self):
-        print(f"La variable:{self.text} el valor--> {self.text2}")
-
-
- 
-        
 #Definimos colores
 class Color:
     def __init__(self):
@@ -63,6 +56,18 @@ class Button:
         self.font = pygame.font.SysFont("Arial", 40)
         self.text_render = self.font.render(self.caption, 1, self.text_color) #rendering text
         self.bton_suma_correcta = 0
+        #     #size boton fix
+        # lentext = len(text)
+        # if lentext == 1:
+        #     text = "  "+ text +"  "
+        # elif lentext == 2:
+        #     text = "  "+ text +" "
+        # elif lentext == 3:
+        #     text = " "+ text +" "
+        # elif lentext == 4:
+        #     text = " " + text
+
+    
 
 
     #Defining button
@@ -76,13 +81,6 @@ class Button:
         pygame.draw.line(self.screen, Color().green, (x + w , y+h), [x + w , y], 5)
         pygame.draw.rect(self.screen, Color().orange, (x, y, w , h)) #Color de fondo botón
         self.screen.blit(self.text_render, (x, y))
-
-    #obtiendo el rect del boton
-    def get_rect(self):
-        x, y, w , h = self.text_render.get_rect()
-        x, y = self.pos
-        return pygame.Rect(x, y, w , h)
-        #return self.text_render.get_rect()
 
 
 #Class to display text on screen
@@ -185,52 +183,19 @@ class Game():
             '''Si quito esta línea de código el texto de indicadores se fuñe, pero no entiendo porque'''
             Game().endtime()   
             # ------------No entiendo esta parte----------------
-            
-            # ----------------------------#Desplegando los botones--------------------------
-            b1 = Button(self.myscreen.screen, self.sizebtn,self.bton1_text,  Color().green, Color().black,(180, self.posbty))
-            b1.drawbutton()
-            b2 = Button(self.myscreen.screen, self.sizebtn,self.bton2_text, Color().green, Color().black,(280,self.posbty))
-            b2.drawbutton()
-            b3 = Button(self.myscreen.screen, self.sizebtn,self.bton3_text, Color().green, Color().black,(380,self.posbty))
-            b3.drawbutton()
-            b4 = Button(self.myscreen.screen, self.sizebtn,self.bton4_text, Color().green, Color().white,(480,self.posbty))
-            b4.drawbutton() #Reset
-            b5 = Button(self.myscreen.screen, self.sizebtn,self.bton5_text, Color().green, Color().red,(580,self.posbty))
-            b5.drawbutton() #Nivel
-            # ----------------------------#Desplegando los botones--------------------------
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: 
                     self.repeat = 0 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if b1.get_rect().collidepoint(pygame.mouse.get_pos()) and self.bton_suma_correcta == 1:
-                        self.aciertos += 1
-                        self.txtcorrecto = "Correcto"
-                        self.correcto += 1
-                        self.Score += 1
-                        self.bton_suma_correcta = 0
-                    elif b2.get_rect().collidepoint(pygame.mouse.get_pos()) and self.bton_suma_correcta == 1:
-                        self.aciertos += 1
-                        self.txtcorrecto = "Correcto"
-                        self.correcto += 1
-                        self.Score += 1
-                        self.bton_suma_correcta = 0
-                    elif b3.get_rect().collidepoint(pygame.mouse.get_pos()) and self.bton_suma_correcta == 2:
-                        self.aciertos += 1
-                        self.txtcorrecto = "Correcto"
-                        self.correcto += 1
-                        self.Score += 1
-                        self.bton_suma_correcta = 0
-                    elif b4.get_rect().collidepoint(pygame.mouse.get_pos()): #Reset
-                        say("b4", "reset").imprimir()
-                    elif b5.get_rect().collidepoint(pygame.mouse.get_pos()):   #Nivel 
-                        say("b5", "nivel").imprimir()
-                        Game().nivel += 1
-                        if Game().nivel > 3:
-                            Game().nivel = 1
-                else:
-                    correcto = 3
 
+
+            # ----------------------------#Desplegando los botones y asignando captión--------------------------
+            buttons1 = Button(self.myscreen.screen, self.sizebtn,self.bton1_text,  Color().green, Color().black,(180, self.posbty)).drawbutton()
+            buttons2 = Button(self.myscreen.screen, self.sizebtn,self.bton2_text, Color().green, Color().black,(280,self.posbty)).drawbutton()
+            buttons3 = Button(self.myscreen.screen, self.sizebtn,self.bton3_text, Color().green, Color().black,(380,self.posbty)).drawbutton()
+            buttons4 = Button(self.myscreen.screen, self.sizebtn,self.bton4_text, Color().green, Color().white,(480,self.posbty)).drawbutton()
+            buttons5 = Button(self.myscreen.screen, self.sizebtn,self.bton5_text, Color().green, Color().red,(580,self.posbty)).drawbutton()
+            # ----------------------------#Desplegando los botones--------------------------
 
             #control del texto desplegado
             if current_time < self.message_end_time:
@@ -250,7 +215,7 @@ class Game():
                 #Colocando los indicadores
                 aleatorio = random.randint(1, 3) #Para saber en cual boton se coloca la respuesta correcta
                 resultado_operacion = operacion[1] #Resultado de la operación 
-                
+                print(aleatorio)
                 space = "  " #para centrar el texto
  
                 if aleatorio == 1:
