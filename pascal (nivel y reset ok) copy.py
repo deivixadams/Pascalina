@@ -4,6 +4,7 @@
 import pygame, random, time
 import sys
 
+
 class Indicadores:
     def __init__(self):
         self.Dicc_textinfo = {
@@ -17,18 +18,8 @@ class Indicadores:
 
     def reset(self):
         self.set_dict_values(1)
-        self.set_correcto(0)
-        self.set_incorrecto(0)
-        self.set_score(0)
 
-    #Correcto
-    def set_correcto(self, correcto):
-        self.Dicc_textinfo["Correcto"] = correcto
-
-     #inCorrecto
-    def set_incorrecto(self, incorrecto):
-        self.Dicc_textinfo["Incorrecto"] = incorrecto
-
+        
     #Nivel
     def get_nivel(self):
         return self.Dicc_textinfo.get("Nivel")
@@ -158,11 +149,7 @@ class TextScreen:
 #class game 
 class Game():
     def __init__(self):
-        #instanciando objetos
         self.d = Indicadores() #Instanciando clase indicadores
-        #self.op = OperacionesAleatorias() #Instanciando clase operaciones
-
-
         # self.screen = screen
         self.repeat = True
         # Texto de los botones
@@ -171,12 +158,10 @@ class Game():
         self.bton3_text = "33333"
         self.bton4_text = "Reset"
         self.bton5_text = "Nivel"
-
-        #Variables para control indicadores
-        self.correcto = 0 #Aciertos control
-        self.incorrecto = 0  
-        self.score = 0
-        
+        self.aciertos = 0 #Aciertos control
+        self.txtcorrecto = " "  #control del mensaje correcto/incorrecto
+        # self.correcto = 0 #total de aciertos
+        # self.incorrecto = 0 #total de errores
         self.myscreen = ScreenMain((800,500), "Pascalina", "D://DEV//#CODE//GAMES//SUMA//IMG//background2.jpg")   
         self.clock = pygame.time.Clock()
         self.fps = 60
@@ -203,33 +188,33 @@ class Game():
             self.message_end_time = pygame.time.get_ticks() + 300
         return self.message_end_time
 
-    # #-------------------------Operaciones-------------------------
-    # #operaciones aleatorias pygame
-    # def operaciones_aleatorias(self):
-    #     # Suma Aleatoria
-    #     lstoper = ["+","-","*","/"]    
-    #     a = random.randint(1,3) #Aqui controlamos el nivel de dificultad
-    #     b = random.randint(1,3) #Aqui controlamos el nivel de dificultad
+    #-------------------------Operaciones-------------------------
+    #operaciones aleatorias pygame
+    def operaciones_aleatorias(self):
+        # Suma Aleatoria
+        lstoper = ["+","-","*","/"]    
+        a = random.randint(1,3) #Aqui controlamos el nivel de dificultad
+        b = random.randint(1,3) #Aqui controlamos el nivel de dificultad
         
-    #     tipo_operacion = random.choice(lstoper)
+        tipo_operacion = random.choice(lstoper)
 
-    #     if tipo_operacion == "+":
-    #         resultado_operacion = a + b 
-    #         text_operacion = (f"{a} + {b}")
-    #     elif tipo_operacion == "-":
-    #         resultado_operacion = a - b 
-    #         text_operacion = (f"{a} - {b}")
-    #     elif tipo_operacion == "*":
-    #         resultado_operacion = a * b 
-    #         text_operacion = (f"{a} * {b}")
-    #     elif tipo_operacion == "/":
-    #         resultado_operacion = a // b 
-    #         text_operacion = (f"{a} / {b}")
+        if tipo_operacion == "+":
+            resultado_operacion = a + b 
+            text_operacion = (f"{a} + {b}")
+        elif tipo_operacion == "-":
+            resultado_operacion = a - b 
+            text_operacion = (f"{a} - {b}")
+        elif tipo_operacion == "*":
+            resultado_operacion = a * b 
+            text_operacion = (f"{a} * {b}")
+        elif tipo_operacion == "/":
+            resultado_operacion = a // b 
+            text_operacion = (f"{a} / {b}")
 
-    #     #Game().bton1_text = "fucking"
+        #Game().bton1_text = "fucking"
         
-    #     return text_operacion, resultado_operacion
-    # # ------------------------------------------------------------
+        return text_operacion, resultado_operacion
+    # ------------------------------------------------------------
 
     
     
@@ -237,41 +222,20 @@ class Game():
     def game_loop(self):
 
         text_render = self.font.render(self.numtext, True, Color().black)
-        lstoper = ["+","-","*","/"]    
 
         while self.repeat:
 
             current_time = pygame.time.get_ticks()
 
-           
-            #operacion = Game().operaciones_aleatorias()
-
-            #-------------------------Operaciones-------------------------
-            a = random.randint(1,3) #Aqui controlamos el nivel de dificultad
-            b = random.randint(1,3) #Aqui controlamos el nivel de dificultad
-            tipo_operacion = random.choice(lstoper)
-
-            if tipo_operacion == "+":
-                resultado_operacion = a + b 
-                text_operacion = (f"{a} + {b}")
-            elif tipo_operacion == "-":
-                resultado_operacion = a - b 
-                text_operacion = (f"{a} - {b}")
-            elif tipo_operacion == "*":
-                resultado_operacion = a * b 
-                text_operacion = (f"{a} * {b}")
-            elif tipo_operacion == "/":
-                resultado_operacion = a // b 
-                text_operacion = (f"{a} / {b}")
-
-            # ------------------------------------------------------------
-
-            self.numtext = text_operacion
+            #dei
+            operacion = Game().operaciones_aleatorias()
+            
+            self.numtext = operacion[0] #Genera operaciones aleatorias y botones
 
             # ------------No entiendo esta parte----------------
             '''Si quito esta línea de código el texto de indicadores se fuñe, pero no entiendo porque'''
             #print(self.d.get_nivel())
-            Game().endtime(self.d.get_nivel())   
+            #Game().endtime(self.d.get_nivel())   
             # ------------No entiendo esta parte----------------
             
             # ----------------------------#Desplegando los botones--------------------------
@@ -286,27 +250,29 @@ class Game():
             b5 = Button(self.myscreen.screen, self.sizebtn,self.bton5_text, Color().green, Color().red,(580,self.posbty))
             b5.drawbutton() #Nivel
             
-            # ---------------------------- Interactividad user--------------------------
+            # ----------------------------  Interactividad user--------------------------
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: 
                     self.repeat = 0 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    
                     if b1.get_rect().collidepoint(pygame.mouse.get_pos()) and self.bton_suma_correcta == 1:
+                        self.aciertos += 1
+                        self.txtcorrecto = "Correcto"
                         self.correcto += 1
+                        self.Score += 1
                         self.bton_suma_correcta = 0
-                        self.d.set_correcto(self.correcto)
-                        print(f"Correcto: {self.correcto}") 
-                    elif b2.get_rect().collidepoint(pygame.mouse.get_pos()) and self.bton_suma_correcta == 2:
+                    elif b2.get_rect().collidepoint(pygame.mouse.get_pos()) and self.bton_suma_correcta == 1:
+                        self.aciertos += 1
+                        self.txtcorrecto = "Correcto"
                         self.correcto += 1
+                        self.Score += 1
                         self.bton_suma_correcta = 0
-                        self.d.set_correcto(self.correcto)
-                        print(f"Correcto: {self.correcto}") 
-                    elif b3.get_rect().collidepoint(pygame.mouse.get_pos()) and self.bton_suma_correcta == 3:
+                    elif b3.get_rect().collidepoint(pygame.mouse.get_pos()) and self.bton_suma_correcta == 2:
+                        self.aciertos += 1
+                        self.txtcorrecto = "Correcto"
                         self.correcto += 1
+                        self.Score += 1
                         self.bton_suma_correcta = 0
-                        self.d.set_correcto(self.correcto)
-                        print(f"Correcto: {self.correcto}") 
                     elif b4.get_rect().collidepoint(pygame.mouse.get_pos()): #Reset
                         say("b4", "reset").imprimir()
                         self.d.reset()
@@ -318,10 +284,9 @@ class Game():
                         # velocidad_juego += 1
                         self.d.set_dict_values(self.d.get_nivel()+1) #Actualiza los valores del diccionario
                         #print(self.d.get_nivel()) #Obtiene el nivel
-                    else:
-                        self.incorrecto += 1
-                        self.d.set_incorrecto(self.incorrecto)
-                        print(f"Incorrecto: {self.incorrecto}") 
+
+                else:
+                    correcto = 3
 
 
             #control del texto desplegado
@@ -336,17 +301,16 @@ class Game():
                 '''
                 
                 self.message_end_time = Game().endtime(self.d.get_nivel())
-                self.numtext = text_operacion# truco: This python trick is called tuple unpacking
+                self.numtext = Game().operaciones_aleatorias()[0] # truco: This python trick is called tuple unpacking
                 text_render = self.font.render(self.numtext, True, Color().black)
                 self.myscreen.screen.blit(text_render, text_render.get_rect(center = self.myscreen.screen.get_rect().center))
                 #Colocando los indicadores
                 aleatorio = random.randint(1, 3) #Para saber en cual boton se coloca la respuesta correcta
-                print(aleatorio)
-                #resultado_operacion = resultado_operacion #Resultado de la operación 
-                
+                resultado_operacion = operacion[1] #Resultado de la operación 
+                print(resultado_operacion) #dei
                 space = "  " #para centrar el texto
  
-                #Aqui controlo que aparece en el texto de los botones, las operaciones
+                #Aqui controlo que aparece en el texto de los botones, las operaciones Dei
                 if aleatorio == 1:
                     self.bton1_text= space+ str(resultado_operacion) + space
                     self.bton2_text= space+ str(random.randint(0,100)+resultado_operacion+1)+ space
@@ -362,24 +326,11 @@ class Game():
                     self.bton1_text= space+ str(random.randint(0,100)+resultado_operacion+1)+ space
                     self.bton2_text= space+ str(random.randint(0,100)+resultado_operacion)+ space
                     self.bton_suma_correcta = 3
-
-            
-
-            #calculando el Score  dei
-            if self.correcto == 0 or self.incorrecto == 0:
-                self.score = 0
-            else:
-                #print(f"Correcto: {self.correcto} Incorrecto: {self.incorrecto} Score: {self.score}")
-                self.score = (self.correcto / (self.correcto + self.incorrecto)) * 100
-                self.d.set_score(self.score)          
-            
-            #Desplegando los indicadores
+                      
             escribir = TextScreen(self.myscreen.screen, self.d.Dicc_textinfo, 25, Color().white, 650, 30) #Aquí se despliega el texto de los indicadores
             escribir.display()
 
             pygame.display.flip()
-        
-        
 
 #starting  the game
 if __name__ == "__main__":
