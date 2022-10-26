@@ -308,7 +308,10 @@ class Game():
                         self.d.set_correcto(self.correcto)
                         print(f"Correcto: {self.correcto}") 
                     elif b4.get_rect().collidepoint(pygame.mouse.get_pos()): #Reset
-                        say("b4", "reset").imprimir()
+                        #say("b4", "reset").imprimir()
+                        self.correcto = 0
+                        self.incorrecto = 0
+                        self.score = 0
                         self.d.reset()
                     elif b5.get_rect().collidepoint(pygame.mouse.get_pos()):   #Nivel 
                         #velocidad_despliegue += 1
@@ -370,7 +373,8 @@ class Game():
                 self.score = 0
             else:
                 #print(f"Correcto: {self.correcto} Incorrecto: {self.incorrecto} Score: {self.score}")
-                self.score = (self.correcto / (self.correcto + self.incorrecto)) * 100
+                self.score = round(((self.correcto / (self.correcto + self.incorrecto)) * 100),2)
+                #self.score = (self.correcto / (self.correcto + self.incorrecto)) * 100
                 self.d.set_score(self.score)          
             
             #Desplegando los indicadores
